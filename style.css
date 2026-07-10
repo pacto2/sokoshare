@@ -211,6 +211,13 @@ input, select {
         padding: 0.5rem;
     }
 
+    /* FIX: Force input rows to stack vertically instead of side-by-side */
+    .form-row {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
     .app-header {
         flex-direction: column;
         text-align: center;
@@ -234,6 +241,4 @@ input, select {
         width: 100% !important;
     }
 }
-
-
 
