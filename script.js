@@ -14,8 +14,16 @@ const communitySurplusPool = [
     { name: "Yellow Beans Packet", qty: "2 kg Bag", urgency: "low", location: "Central Pantry Shelf B", anonymous: true },
     { name: "Fresh Tomatoes", qty: "1 Small Crate", urgency: "high", location: "Community Fridge Slot 4", anonymous: false },
     { name: "Sweet Potatoes", qty: "3 kg Basket", urgency: "low", location: "Central Pantry Shelf C", anonymous: false },
-    { name: "Fresh Milk Packet", qty: "1 Litre", urgency: "high", location: "Community Fridge Slot 2", anonymous: true }
+    { name: "Fresh KCC Milk Packets", qty: "3 Litres", urgency: "high", location: "Community Fridge Slot 2", anonymous: true },
+    { name: "Crate of Ripe Mangoes", qty: "12 Pieces", urgency: "medium", location: "Main Gate Table", anonymous: false },
+    { name: "Surplus Arrowroots (Nduma)", qty: "4 large roots", urgency: "medium", location: "Central Pantry Shelf A", anonymous: false },
+    { name: "Green Maize Cobs", qty: "6 Pieces", urgency: "medium", location: "Main Gate Collection Basket", anonymous: false },
+    { name: "Bag of Charcoal", qty: "1 Small Sack", urgency: "low", location: "Dry Storage Bay 1", anonymous: true },
+    { name: "Fresh Cabbage", qty: "2 Large Heads", urgency: "medium", location: "Community Fridge Shelf 2", anonymous: false },
+    { name: "English Potatoes", qty: "5 kg Bag", urgency: "low", location: "Central Pantry Shelf D", anonymous: false }
 ];
+
+
 
 const formElement = document.getElementById('share-form');
 const dispatchGrid = document.getElementById('dispatch-grid');
