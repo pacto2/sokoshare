@@ -6,8 +6,6 @@ let mutualAidShares = JSON.parse(localStorage.getItem('sokoshare_db')) || [
 
 let currentTreasuryBalance = parseInt(localStorage.getItem('sokoshare_balance')) || 4200;
 const targetTreasuryGoal = 10000;
-
-// Member Tracking Tally System
 let registeredMembersCount = parseInt(localStorage.getItem('sokoshare_members')) || 84;
 
 const communitySurplusPool = [
@@ -38,8 +36,6 @@ function getRelativeTimeString(previousTimestamp) {
 function renderDispatchGrid() {
     dispatchGrid.innerHTML = '';
     statActive.textContent = mutualAidShares.length;
-    
-    // Sync modern member statistics straight to the interface layout
     if (statMembers) statMembers.textContent = registeredMembersCount;
     
     localStorage.setItem('sokoshare_db', JSON.stringify(mutualAidShares));
@@ -75,31 +71,48 @@ function syncTreasuryInterface() {
     localStorage.setItem('sokoshare_balance', currentTreasuryBalance);
 }
 
-function triggerAutomatedCommunitySpawns() {
-    const spawnCount = Math.floor(Math.random() * 2) + 1; 
-    
-    // Simulate community growth! Whenever a package circulation finishes, new members join up
-    registeredMembersCount += Math.floor(Math.random() * 2); 
-    
-    for (let i = 0; i < spawnCount; i++) {
-        const randomItemTemplate = communitySurplusPool[Math.floor(Math.random() * communitySurplusPool.length)];
-        
-        const newSimulatedShare = {
-            id: Date.now() + i,
-            name: randomItemTemplate.name,
-            qty: randomItemTemplate.qty,
-            urgency: randomItemTemplate.urgency,
-            location: randomItemTemplate.location,
-            timestamp: Date.now(),
-            anonymous: randomItemTemplate.anonymous
-        };
-        
-        mutualAidShares.unshift(newSimulatedShare);
-    }
-    
+// Spawns 1 fresh dispatch package smoothly
+function spawnAutomatedPackage() {
+    const randomItemTemplate = communitySurplusPool[Math.floor(Math.random() * communitySurplusPool.length)];
+    mutualAidShares.unshift({
+        id: Date.now(),
+        name: randomItemTemplate.name,
+        qty: randomItemTemplate.qty,
+        urgency: randomItemTemplate.urgency,
+        location: randomItemTemplate.location,
+        timestamp: Date.now(),
+        anonymous: randomItemTemplate.anonymous
+    });
+    // Add a chance that a new user signed up to post it
+    if (Math.random() > 0.5) registeredMembersCount += 1;
     renderDispatchGrid();
 }
 
+// Dynamic Background Sync Core Engine (Simulates real community actions)
+function runLiveSyncBackgroundTicker() {
+    const actionSelector = Math.random();
+
+    if (actionSelector < 0.4) {
+        // 40% Chance: A community member drops off a brand new item
+        spawnAutomatedPackage();
+    } else if (actionSelector < 0.7 && mutualAidShares.length > 2) {
+        // 30% Chance: Someone nearby claims an existing open item from the list
+        mutualAidShares.pop(); // Removes the oldest item to show rapid turnover
+        renderDispatchGrid();
+    } else {
+        // 30% Chance: A micro-contribution rolls into the Treasury ledger fund
+        const presetDonations = [50, 100, 200, 500];
+        const randomDonation = presetDonations[Math.floor(Math.random() * presetDonations.length)];
+        
+        currentTreasuryBalance += randomDonation;
+        // Loop back down to support simulation baseline if goal is completely overflowed
+        if (currentTreasuryBalance > targetTreasuryGoal) currentTreasuryBalance = 3500; 
+        
+        syncTreasuryInterface();
+    }
+}
+
+// User Action Pipelines
 window.openContributionModal = function(optAmount) {
     if (modalElement) modalElement.style.display = 'flex';
 };
@@ -110,11 +123,7 @@ window.closeContributionModal = function() {
 
 formElement.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    // If a non-anonymous user dispatches something brand new, increment our registered roster tally
-    if (!document.getElementById('item-anon').checked) {
-        registeredMembersCount += 1;
-    }
+    if (!document.getElementById('item-anon').checked) registeredMembersCount += 1;
 
     mutualAidShares.unshift({
         id: Date.now(),
@@ -132,17 +141,18 @@ formElement.addEventListener('submit', (e) => {
 window.claimShareItem = function(itemId) {
     mutualAidShares = mutualAidShares.filter(item => item.id !== itemId);
     renderDispatchGrid();
-    
-    setTimeout(() => {
-        triggerAutomatedCommunitySpawns();
-    }, 2000);
 };
 
 document.addEventListener("DOMContentLoaded", () => {
     const mainDonateBtn = document.getElementById('btn-donate-link');
     if (mainDonateBtn) mainDonateBtn.addEventListener('click', () => window.openContributionModal());
+    
+    // Set Interval: Fires the background automation every 20 seconds (20000 milliseconds)
+    setInterval(runLiveSyncBackgroundTicker, 20000);
 });
 
 renderDispatchGrid();
 syncTreasuryInterface();
+
+
 
