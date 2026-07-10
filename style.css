@@ -202,5 +202,38 @@ input, select {
         box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
     }
 }
+/* Mobile Optimization Override */
+@media (max-width: 768px) {
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 0.5rem;
+    }
+
+    .app-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .community-stats {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .stat-node {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .input-panel, .display-deck {
+        width: 100% !important;
+    }
+}
+
 
 
